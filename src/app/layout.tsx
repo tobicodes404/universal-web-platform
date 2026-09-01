@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://universal-platform.vercel.app", // ডিপ্লয় করার পর এটা আপডেট করবেন
+    url: "https://universal-platform.vercel.app",
     siteName: "Universal Platform",
     title: "Universal Platform - Tools, Games & Learning",
     description: "Free online platform with 24+ productivity tools, interactive games, and learning resources.",
@@ -33,12 +33,11 @@ export const metadata: Metadata = {
   },
 };
 
-// গুগলকে সাইটের আসল নাম এবং ব্র্যান্ডিং বোঝানোর জন্য Schema
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": "Universal Platform",
-  "url": "https://universal-platform.vercel.app", // ডিপ্লয় করার পর এটা আপডেট করবেন
+  "url": "https://universal-platform.vercel.app",
   "description": "Free online platform with 24+ productivity tools, interactive games, and learning resources.",
   "potentialAction": {
     "@type": "SearchAction",
@@ -56,13 +55,13 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        {/* JSON-LD Schema for Google */}
+      </head>
+      <body className={inter.className}>
+        {/* Moved to body to prevent hydration mismatch from browser extensions injecting into <head> */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-      </head>
-      <body className={inter.className}>
         <Header />
         <Analytics />
         <main className="min-h-screen">
