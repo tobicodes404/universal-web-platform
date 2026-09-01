@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
 import Analytics from "@/components/analytics";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 
 const inter = Inter({ subsets: ["latin"] });
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://universal-platform.netlify.app";
 
 export const metadata: Metadata = {
   title: {
@@ -17,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://universal-platform.vercel.app",
+    url: siteUrl,
     siteName: "Universal Platform",
     title: "Universal Platform - Tools, Games & Learning",
     description: "Free online platform with 24+ productivity tools, interactive games, and learning resources.",
@@ -37,11 +40,11 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": "Universal Platform",
-  "url": "https://universal-platform.vercel.app",
+  "url": siteUrl,
   "description": "Free online platform with 24+ productivity tools, interactive games, and learning resources.",
   "potentialAction": {
     "@type": "SearchAction",
-    "target": "https://universal-platform.vercel.app/tools?q={search_term_string}",
+    "target": `${siteUrl}/tools?q={search_term_string}`,
     "query-input": "required name=search_term_string"
   }
 };
@@ -55,15 +58,17 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-      </head>
-      <body className={inter.className}>
-        {/* Moved to body to prevent hydration mismatch from browser extensions injecting into <head> */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+      </head>
+      <body className={inter.className}>
         <Header />
-        <Analytics />
+        {/* Suspense boundary added to prevent build errors with useSearchParams */}
+        <Suspense fallback={null}>
+          <Analytics />
+        </Suspense>
         <main className="min-h-screen">
           {children}
         </main>
