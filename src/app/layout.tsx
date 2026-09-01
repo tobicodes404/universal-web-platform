@@ -58,17 +58,19 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+      </head>
+      <body className={inter.className}>
+        {/* Moved to body to prevent hydration mismatch from browser extensions injecting into <head> */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-      </head>
-      <body className={inter.className}>
-        <Header />
-        {/* Suspense boundary added to prevent build errors with useSearchParams */}
+        
         <Suspense fallback={null}>
           <Analytics />
         </Suspense>
+        
+        <Header />
         <main className="min-h-screen">
           {children}
         </main>
